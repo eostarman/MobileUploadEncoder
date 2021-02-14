@@ -24,7 +24,7 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "MobileUploadEncoder",
-            dependencies: ["MoneyAndExchangeRates", "MobileDownload"]),
+            dependencies: ["MoneyAndExchangeRates", "MobileDownload", "MobileDownloadDecoder"]),
         .testTarget(
             name: "MobileUploadEncoderTests",
             dependencies: ["MobileUploadEncoder", "MoneyAndExchangeRates", "MobileDownload", "MobileDownloadDecoder"]),
