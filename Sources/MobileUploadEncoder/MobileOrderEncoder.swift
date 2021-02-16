@@ -136,13 +136,10 @@ fileprivate extension MobileOrder {
         
         if isVendingReplenishment {
             tokenBlob.addIntIfNotNull(.ToEquipNid, toEquipNid)
-            tokenBlob.addBoolIfNotNull(.IsVendingReplenishment, isVendingReplenishment)
+            tokenBlob.addStringIfNotNull(.IsVendingReplenishment, isVendingReplenishment ? "true" : "false") // we used c#'s bool.ToString() rather than the standard (for MobileDownload encoding) of "1" or "0"
             tokenBlob.addIntIfNotNull(.ReplenishmentVendTicketNumber, replenishmentVendTicketNumber)
         }
-        
-        // This is no longer being utilized by Deliver One Stop, but we need to leave this support in here for the time being for compatibility with old data/handhelds
-        // tokenBlob.addCommaCommand(.ordersCreditInvoiceAppliedTo, "orderNumber,applyAmount,orderAmountDue")
-        
+
         tokenBlob.addBoolIfNotNull(.IsCoopDeliveryPoint, isCoopDeliveryPoint)
         
         tokenBlob.addIntIfNotNull(.CoopCusNid, coopCusNid)

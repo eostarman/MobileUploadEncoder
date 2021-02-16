@@ -54,14 +54,17 @@ class TokenBlob {
         guard let value = value else {
             return ""
         }
-        return simpleNumberFormatter.string(from: value as NSNumber)!
+        return value.description
+        //return simpleNumberFormatter.string(from: value as NSNumber)!
     }
     
     func getString(_ value: Decimal?) -> String {
         guard let value = value else {
             return ""
         }
-        return simpleNumberFormatter.string(from: value as NSNumber)!
+        let decimalNumber = value as NSDecimalNumber
+        let result = decimalNumber.description(withLocale: Locale(identifier: "en_US"))
+        return result
     }
     
     func getString(_ value: MoneyWithoutCurrency?, numberOfDecimals: Int) -> String {
@@ -69,7 +72,8 @@ class TokenBlob {
             return ""
         }
         let scaledAmount = value.scaledTo(numberOfDecimals: numberOfDecimals).scaledAmount
-        return simpleNumberFormatter.string(from: scaledAmount as NSNumber)!
+        return scaledAmount.description
+        //return simpleNumberFormatter.string(from: scaledAmount as NSNumber)!
     }
     
     func getString(_ value: Date?, _ format: dateFormat) -> String {

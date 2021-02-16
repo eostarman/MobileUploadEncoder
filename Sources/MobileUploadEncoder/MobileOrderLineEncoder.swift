@@ -16,7 +16,6 @@ class MobileOrderLineEncoder {
         var qtyOrdered: Int = 0
         var qtyShipped: Int = 0
         var qtyDeliveryDriverAdjustment: Int? = nil
-        var qtyPalletOptimizationAdjustment: Int? = nil
         var crvContainerTypeNid: Int? = nil
         var unitDeposit: MoneyWithoutCurrency? = nil
         var unitFreight: MoneyWithoutCurrency? = nil
@@ -25,6 +24,8 @@ class MobileOrderLineEncoder {
         var carrierDeposit: MoneyWithoutCurrency? = nil
         var bagCredit: MoneyWithoutCurrency? = nil
         var statePickupCredit: MoneyWithoutCurrency? = nil
+        var unitCRV: MoneyWithoutCurrency? = nil
+        var qtyPalletOptimizationAdjustment: Int? = nil
         var wasDownloaded: Bool = false
         
         for x in lines {
@@ -96,6 +97,11 @@ class MobileOrderLineEncoder {
                 tokenBlob.addMoneyAsDecimal(.StatePickupCredit, x.statePickupCredit)
             }
             
+            if x.unitCRV != unitCRV {
+                unitCRV = x.unitCRV
+                tokenBlob.addMoneyAsDecimal(.UnitCRV, x.unitCRV)
+            }
+            
             if x.unitFreight != unitFreight {
                 unitFreight = x.unitFreight
                 tokenBlob.addDecimal2(.UnitFreight, unitFreight)
@@ -131,7 +137,6 @@ class MobileOrderLineEncoder {
             tokenBlob.addBoolIfTrue(.IsManualDiscount, x.isManualDiscount)
             tokenBlob.addBoolIfTrue(.IsManualPrice, x.isManualPrice)
             tokenBlob.addBoolIfTrue(.IsManualDeposit, x.isManualDeposit)
-            tokenBlob.addBoolIfTrue(.IsManualRebate, x.isManualRebate)
             tokenBlob.addBoolIfTrue(.BasePricesAndPromosOnQtyOrdered, x.basePricesAndPromosOnQtyOrdered)
             tokenBlob.addBoolIfTrue(.PreservePricing, x.preservePricing)
             tokenBlob.addBoolIfTrue(.WasAutoCut, x.wasAutoCut)
@@ -158,7 +163,7 @@ class MobileOrderLineEncoder {
             
             tokenBlob.addStringIfNotEmpty(.ItemNameOverride, x.itemNameOverride)
             
-            tokenBlob.addIntIfNotNull(.MergeSequenceTag, x.mergeSequenceTag ?? -1)
+            tokenBlob.addIntIfNotNull(.MergeSequenceTag, x.mergeSequenceTag)
             
             tokenBlob.addBool(.AutoFreeGoodsLine, x.autoFreeGoodsLine)
             tokenBlob.addBool(.IsPreferredFreeGoodLine, x.isPreferredFreeGoodLine)
@@ -189,7 +194,7 @@ class MobileOrderLineEncoder {
             
             tokenBlob.addIntIfNotNull(.NoteLink, x.noteLink)
             
-            tokenBlob.addInt(.ItemNid, x.itemNid ?? 0) // nil if a note line? It must be the last token for this line (causes an addLine() in the decoder)
+            tokenBlob.addInt(.ItemNid, x.itemNid) // nil if a note line? It must be the last token for this line (causes an addLine() in the decoder)
         }
     }
     

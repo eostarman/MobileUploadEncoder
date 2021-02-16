@@ -12,6 +12,14 @@ import MoneyAndExchangeRates
 @testable import MobileUploadEncoder
 
 class TokenBlobTests: XCTestCase {
+    
+    func testEmptyString() throws {
+        let tokenBlob = TokenBlob()
+        
+        tokenBlob.addStringIfNotEmpty(.ShipAdr1, nil)
+        
+        XCTAssertEqual(tokenBlob.result, "")
+    }
 
     func testNilDate() throws {
         let tokenBlob = TokenBlob()
