@@ -2,7 +2,7 @@
 
 import Foundation
 import MoneyAndExchangeRates
-import MobileDownload
+import MobileLegacyOrder
 
 struct MobileOrderEncoder {
     static func encodeMobileOrder(order: MobileOrder) -> String {

@@ -2,6 +2,7 @@ import XCTest
 import MoneyAndExchangeRates
 import MobileDownload
 import MobileDownloadDecoder
+import MobileLegacyOrder
 
 @testable import MobileUploadEncoder
 

@@ -3,6 +3,7 @@
 import Foundation
 import MoneyAndExchangeRates
 import MobileDownload
+import MobileLegacyOrder
 
 class MobileOrderLineEncoder {
     
