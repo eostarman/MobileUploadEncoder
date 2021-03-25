@@ -16,6 +16,7 @@ fileprivate extension MobileOrder {
     func encodeForMobileUpload() -> String {
         let tokenBlob = TokenBlob()
         
+        tokenBlob.addRecNidIfPositive(.TransactionCurrencyNid, transactionCurrencyNid);
         tokenBlob.addRecNidIfPositive(.CompanyNid, companyNid);
         tokenBlob.addIntIfNotNull(.OrderNumber, orderNumber);
         tokenBlob.addRecNidIfPositive(.WhseNid, whseNid);
@@ -66,6 +67,8 @@ fileprivate extension MobileOrder {
         tokenBlob.addDecimal4IfNonZero(.SalesTaxLocal, salesTaxLocal)
         tokenBlob.addDecimal4IfNonZero(.SalesTaxCity, salesTaxCity)
         tokenBlob.addDecimal4IfNonZero(.SalesTaxWholesale, salesTaxWholesale)
+        tokenBlob.addDecimal4IfNonZero(.VAT, VAT)
+        tokenBlob.addDecimal4IfNonZero(.Levy, levy)
         tokenBlob.addDecimal4IfNonZero(.TotalFreight, totalFreight)
         
         tokenBlob.addBoolIfTrue(.IsExistingOrder, isExistingOrder)
@@ -113,8 +116,8 @@ fileprivate extension MobileOrder {
         tokenBlob.addBoolIfNotNull(.IgnoreDeliveryTruckRestrictions, ignoreDeliveryTruckRestrictions)
         tokenBlob.addBoolIfNotNull(.IsOffScheduleDelivery, isOffScheduleDelivery)
         tokenBlob.addBoolIfNotNull(.IsSpecialPaymentTerms, isSpecialPaymentTerms)
-        //TODO: tokenBlob.addCommaCommand(.SignatureVectors, SignatureVector.Serialize(signatureVectors))
-        //TODO: tokenBlob.addCommaCommand(.DriverSignatureVectors, SignatureVector.Serialize(driverSignatureVectors))
+        tokenBlob.addStringIfNotNull(.SignatureVectors, signatureVectors) // SignatureVector.Serialize(signatureVectors))
+        tokenBlob.addStringIfNotNull(.DriverSignatureVectors, driverSignatureVectors) //, SignatureVector.Serialize(driverSignatureVectors))
         tokenBlob.addBoolIfNotNull(.ReturnsValidated, returnsValidated)
         
         if !orderNumbersForPartitioner.isEmpty {

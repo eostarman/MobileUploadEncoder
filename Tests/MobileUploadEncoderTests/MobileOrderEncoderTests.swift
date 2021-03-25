@@ -6,8 +6,8 @@ import MobileLegacyOrder
 
 @testable import MobileUploadEncoder
 
-fileprivate let forceNils = true
-fileprivate let forceTrue = true
+fileprivate let forceNils = false
+fileprivate let forceTrue = false
 
 final class MobileOrderEncoderTests: XCTestCase {
     func testExample() {
@@ -31,6 +31,7 @@ final class MobileOrderEncoderTests: XCTestCase {
         
         let decoded = MobileOrderDecoder.decodeMobileOrder(blob: encoded)
         
+        XCTAssertEqual(decoded.transactionCurrencyNid, order.transactionCurrencyNid)
         XCTAssertEqual(decoded.companyNid, order.companyNid)
         XCTAssertEqual(decoded.promoDate, order.promoDate)
         
@@ -56,6 +57,7 @@ final class MobileOrderEncoderTests: XCTestCase {
         let decoded = MobileOrderDecoder.decodeMobileOrder(blob: encoded)
         
         XCTAssertEqual(order.id, decoded.id)
+        XCTAssertEqual(decoded.transactionCurrencyNid, order.transactionCurrencyNid)
         XCTAssertEqual(order.companyNid, decoded.companyNid)
         XCTAssertEqual(order.orderNumber, decoded.orderNumber)
         XCTAssertEqual(order.whseNid, decoded.whseNid)
@@ -91,8 +93,8 @@ final class MobileOrderEncoderTests: XCTestCase {
         XCTAssertEqual(order.isOffScheduleDelivery, decoded.isOffScheduleDelivery)
         XCTAssertEqual(order.isSpecialPaymentTerms, decoded.isSpecialPaymentTerms)
         XCTAssertEqual(order.promoDate, decoded.promoDate)
-        XCTAssertEqual(order.authenticatedByNid, decoded.authenticatedByNid)
         XCTAssertEqual(order.authenticatedDate, decoded.authenticatedDate)
+        XCTAssertEqual(order.authenticatedByNid, decoded.authenticatedByNid)
         XCTAssertEqual(order.deliveredDate, decoded.deliveredDate)
         XCTAssertEqual(order.deliveredByNid, decoded.deliveredByNid)
         XCTAssertEqual(order.deliveryDocumentDate, decoded.deliveryDocumentDate)
@@ -126,8 +128,8 @@ final class MobileOrderEncoderTests: XCTestCase {
         XCTAssertEqual(order.voidedDate, decoded.voidedDate)
         XCTAssertEqual(order.voidedByNid, decoded.voidedByNid)
         XCTAssertEqual(order.loadNumber, decoded.loadNumber)
-        XCTAssertEqual(order.toEquipNid, decoded.toEquipNid)
         XCTAssertEqual(order.isVendingReplenishment, decoded.isVendingReplenishment)
+        XCTAssertEqual(order.toEquipNid, decoded.toEquipNid)
         XCTAssertEqual(order.replenishmentVendTicketNumber, decoded.replenishmentVendTicketNumber)
         XCTAssertEqual(order.isCoopDeliveryPoint, decoded.isCoopDeliveryPoint)
         XCTAssertEqual(order.coopCusNid, decoded.coopCusNid)
@@ -230,7 +232,6 @@ final class MobileOrderEncoderTests: XCTestCase {
                 XCTAssertEqual(x.unitFreight, y.unitFreight)
                 XCTAssertEqual(x.unitDeliveryCharge, y.unitDeliveryCharge)
                 XCTAssertEqual(x.qtyBackordered, y.qtyBackordered)
-                XCTAssertEqual(x.qtyDiscountedOnThisLine, y.qtyDiscountedOnThisLine)
                 XCTAssertEqual(x.isCloseDatedInMarket, y.isCloseDatedInMarket)
                 XCTAssertEqual(x.isManualDeposit, y.isManualDeposit)
                 XCTAssertEqual(x.basePricesAndPromosOnQtyOrdered, y.basePricesAndPromosOnQtyOrdered)
@@ -238,14 +239,10 @@ final class MobileOrderEncoderTests: XCTestCase {
                 XCTAssertEqual(x.mergeSequenceTag, y.mergeSequenceTag)
                 XCTAssertEqual(x.autoFreeGoodsLine, y.autoFreeGoodsLine)
                 XCTAssertEqual(x.isPreferredFreeGoodLine, y.isPreferredFreeGoodLine)
-                XCTAssertEqual(x.originalQtyShipped, y.originalQtyShipped)
-                XCTAssertEqual(x.originalItemWriteoffNid, y.originalItemWriteoffNid)
                 XCTAssertEqual(x.uniqueifier, y.uniqueifier)
                 XCTAssertEqual(x.wasDownloaded, y.wasDownloaded)
                 XCTAssertEqual(x.pickAndShipDateCodes, y.pickAndShipDateCodes)
                 XCTAssertEqual(x.dateCode, y.dateCode)
-                XCTAssertEqual(x.parentSlsEmpNid, y.parentSlsEmpNid)
-                XCTAssertEqual(x.parentOrderedDate, y.parentOrderedDate)
                 XCTAssertEqual(x.CMAOnNid, y.CMAOnNid)
                 XCTAssertEqual(x.CTMOnNid, y.CTMOnNid)
                 XCTAssertEqual(x.CCFOnNid, y.CCFOnNid)
@@ -310,6 +307,7 @@ fileprivate func getRandomDate() -> Date {
 }
 
 fileprivate func getRandomDateOrNil() -> Date? {
+    return nil
     if forceNils { return nil }
   
     return Int.random(in: 1 ... 5) == 1 ? nil : getRandomDate()
@@ -317,6 +315,7 @@ fileprivate func getRandomDateOrNil() -> Date? {
 
 fileprivate func getRandomStringOrNil() -> String? {
     if forceNils { return nil }
+    return "xx"
   
     switch Int.random(in: 1 ... 3) {
     case 1:
@@ -331,6 +330,8 @@ fileprivate func getRandomStringOrNil() -> String? {
 fileprivate func getRandomBool() -> Bool {
     if forceTrue {
         return true
+    } else {
+        return false
     }
     return Bool.random()
 }
@@ -358,6 +359,7 @@ fileprivate func getMockOrderLine() -> MobileOrderLine {
 
 fileprivate extension MobileOrder {
     func fillWithRandomValues() {
+        transactionCurrencyNid = getRandomInt()
         companyNid = getRandomInt()
         orderNumber = getRandomInt()
         whseNid = getRandomInt()
@@ -392,44 +394,47 @@ fileprivate extension MobileOrder {
         isOffScheduleDelivery = getRandomBool()
         isSpecialPaymentTerms = getRandomBool()
         promoDate = getRandomDateOrNil()
-        authenticatedByNid = getRandomIntOrNil()
+        
         authenticatedDate = getRandomDateOrNil()
+        authenticatedByNid = authenticatedDate == nil ? nil : getRandomInt()
         deliveredDate = getRandomDateOrNil()
-        deliveredByNid = getRandomIntOrNil()
+        deliveredByNid = deliveredDate == nil ? nil : getRandomIntOrNil()
         deliveryDocumentDate = getRandomDateOrNil()
-        deliveryDocumentByNid = getRandomIntOrNil()
+        deliveryDocumentByNid = deliveryDocumentDate == nil ? nil : getRandomIntOrNil()
         dispatchedDate = getRandomDateOrNil()
-        dispatchedByNid = getRandomIntOrNil()
+        dispatchedByNid = dispatchedDate == nil ? nil : getRandomIntOrNil()
         ediInvoiceDate = getRandomDateOrNil()
-        ediInvoiceByNid = getRandomIntOrNil()
+        ediInvoiceByNid = ediInvoiceDate == nil ? nil : getRandomIntOrNil()
         ediPaymentDate = getRandomDateOrNil()
-        ediPaymentByNid = getRandomIntOrNil()
+        ediPaymentByNid = ediPaymentDate == nil ? nil :getRandomIntOrNil()
         ediShipNoticeDate = getRandomDateOrNil()
-        ediShipNoticeByNid = getRandomIntOrNil()
+        ediShipNoticeByNid = ediShipNoticeDate == nil ? nil :getRandomIntOrNil()
         enteredDate = getRandomDateOrNil()
-        enteredByNid = getRandomIntOrNil()
+        enteredByNid = enteredDate == nil ? nil :getRandomIntOrNil()
         followupInvoiceDate = getRandomDateOrNil()
-        followupInvoiceByNid = getRandomIntOrNil()
+        followupInvoiceByNid = followupInvoiceDate == nil ? nil :getRandomIntOrNil()
         loadedDate = getRandomDateOrNil()
-        loadedByNid = getRandomIntOrNil()
+        loadedByNid = loadedDate == nil ? nil :getRandomIntOrNil()
         orderedDate = getRandomDateOrNil()
-        orderedByNid = getRandomIntOrNil()
+        orderedByNid = orderedDate == nil ? nil :getRandomIntOrNil()
         palletizedDate = getRandomDateOrNil()
-        palletizedByNid = getRandomIntOrNil()
+        palletizedByNid = palletizedDate == nil ? nil :getRandomIntOrNil()
         pickListDate = getRandomDateOrNil()
-        pickListByNid = getRandomIntOrNil()
+        pickListByNid = pickListDate == nil ? nil :getRandomIntOrNil()
         shippedDate = getRandomDateOrNil()
-        shippedByNid = getRandomIntOrNil()
+        shippedByNid = shippedDate == nil ? nil :getRandomIntOrNil()
         stagedDate = getRandomDateOrNil()
-        stagedByNid = getRandomIntOrNil()
+        stagedByNid = stagedDate == nil ? nil :getRandomIntOrNil()
         verifiedDate = getRandomDateOrNil()
-        verifiedByNid = getRandomIntOrNil()
+        verifiedByNid = verifiedDate == nil ? nil :getRandomIntOrNil()
         voidedDate = getRandomDateOrNil()
-        voidedByNid = getRandomIntOrNil()
+        voidedByNid = voidedDate == nil ? nil :getRandomIntOrNil()
         loadNumber = getRandomIntOrNil()
-        toEquipNid = getRandomIntOrNil()
         isVendingReplenishment = getRandomBool()
-        replenishmentVendTicketNumber = getRandomIntOrNil()
+        if isVendingReplenishment {
+            toEquipNid = getRandomIntOrNil()
+            replenishmentVendTicketNumber = getRandomIntOrNil()
+        }
         isCoopDeliveryPoint = getRandomBool()
         coopCusNid = getRandomIntOrNil()
         doNotOptimizePalletsWithLayerRounding = getRandomBool()
@@ -535,7 +540,6 @@ fileprivate extension MobileOrderLine {
         unitFreight = getRandomMoneyWithoutCurrency(numberOfDecimals: 2)
         unitDeliveryCharge = getRandomMoneyWithoutCurrency(numberOfDecimals: 2)
         qtyBackordered = getRandomIntOrNil()
-        qtyDiscountedOnThisLine = getRandomIntOrNil()
         isCloseDatedInMarket = getRandomBool()
         isManualDeposit = getRandomBool()
         basePricesAndPromosOnQtyOrdered = getRandomBool()
@@ -543,14 +547,10 @@ fileprivate extension MobileOrderLine {
         mergeSequenceTag = getRandomIntOrNil()
         autoFreeGoodsLine = getRandomBool()
         isPreferredFreeGoodLine = getRandomBool()
-        originalQtyShipped = getRandomIntOrNil()
-        originalItemWriteoffNid = getRandomRecNidOrNil()
         uniqueifier = getRandomIntOrNil()
         wasDownloaded = getRandomBool()
         pickAndShipDateCodes = getRandomStringOrNil()
         dateCode = getRandomDateOrNil()
-        parentSlsEmpNid = getRandomRecNidOrNil()
-        parentOrderedDate = getRandomDateOrNil()
         CMAOnNid = getRandomRecNidOrNil()
         CTMOnNid = getRandomRecNidOrNil()
         CCFOnNid = getRandomRecNidOrNil()
