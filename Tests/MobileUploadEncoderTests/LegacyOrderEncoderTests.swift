@@ -268,10 +268,6 @@ final class LegacyOrderEncoderTests: XCTestCase {
             }
         }
         
-        
-        
-        
-        
         let jsonEncoder = JSONEncoder()
         let jsonData = try jsonEncoder.encode(order)
         let json = String(data: jsonData, encoding: String.Encoding.utf8)
@@ -349,12 +345,12 @@ fileprivate func getRandomMoneyWithoutCurrencyOrNil(numberOfDecimals: Int = 4) -
     return Int.random(in: 1 ... 5) == 1 ? nil : getRandomMoneyWithoutCurrency(numberOfDecimals: numberOfDecimals)
 }
 
-fileprivate func getMockOrderLine() -> LegacyOrderLine {
-    let mobileOrderLine = LegacyOrderLine()
+fileprivate func getMockLegacyOrderLine() -> LegacyOrderLine {
+    let legacyOrderLine = LegacyOrderLine()
     
-    mobileOrderLine.fillWithRandomValues()
+    legacyOrderLine.fillWithRandomValues()
     
-    return mobileOrderLine
+    return legacyOrderLine
 }
 
 fileprivate extension LegacyOrder {
