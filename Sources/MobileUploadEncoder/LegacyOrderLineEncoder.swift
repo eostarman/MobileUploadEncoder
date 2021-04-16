@@ -5,9 +5,9 @@ import MoneyAndExchangeRates
 import MobileDownload
 import MobileLegacyOrder
 
-class MobileOrderLineEncoder {
+class LegacyOrderLineEncoder {
     
-    static func encodeForMobileUpload(tokenBlob: TokenBlob, lines: [MobileOrderLine]) {
+    static func encodeForMobileUpload(tokenBlob: TokenBlob, lines: [LegacyOrderLine]) {
 
         // for most of the fields we only emit the token if it differs from the prior lines value
         var promo1Nid: Int? = nil

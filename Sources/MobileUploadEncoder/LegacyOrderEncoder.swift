@@ -4,14 +4,14 @@ import Foundation
 import MoneyAndExchangeRates
 import MobileLegacyOrder
 
-struct MobileOrderEncoder {
-    static func encodeMobileOrder(order: MobileOrder) -> String {
+struct LegacyOrderEncoder {
+    static func encodeLegacyOrder(order: LegacyOrder) -> String {
         let blob = order.encodeForMobileUpload()
         return blob
     }
 }
 
-fileprivate extension MobileOrder {
+fileprivate extension LegacyOrder {
     
     func encodeForMobileUpload() -> String {
         let tokenBlob = TokenBlob()
@@ -163,7 +163,7 @@ fileprivate extension MobileOrder {
         
         tokenBlob.addBoolIfNotNull(.ManualHold, manualHold)
     
-        MobileOrderLineEncoder.encodeForMobileUpload(tokenBlob: tokenBlob, lines: lines)
+        LegacyOrderLineEncoder.encodeForMobileUpload(tokenBlob: tokenBlob, lines: lines)
         return tokenBlob.result
     }
 }

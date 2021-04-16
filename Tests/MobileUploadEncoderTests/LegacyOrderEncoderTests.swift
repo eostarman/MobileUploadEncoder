@@ -9,15 +9,15 @@ import MobileLegacyOrder
 fileprivate let forceNils = false
 fileprivate let forceTrue = false
 
-final class MobileOrderEncoderTests: XCTestCase {
+final class LegacyOrderEncoderTests: XCTestCase {
     func testExample() {
         
-        let order = MobileOrder()
+        let order = LegacyOrder()
         
         //order.companyNid = 12
         order.promoDate = dayAfterChristmas
         
-        let line = MobileOrderLine()
+        let line = LegacyOrderLine()
         line.itemNid = 12
         line.qtyOrdered = 100
         line.qtyShipped = 99
@@ -27,9 +27,9 @@ final class MobileOrderEncoderTests: XCTestCase {
         
         XCTAssertEqual(order.lines.first!.qtyOrdered, 100)
         
-        let encoded = MobileOrderEncoder.encodeMobileOrder(order: order)
+        let encoded = LegacyOrderEncoder.encodeLegacyOrder(order: order)
         
-        let decoded = MobileOrderDecoder.decodeMobileOrder(blob: encoded)
+        let decoded = LegacyOrderDecoder.decodeLegacyOrder(blob: encoded)
         
         XCTAssertEqual(decoded.transactionCurrencyNid, order.transactionCurrencyNid)
         XCTAssertEqual(decoded.companyNid, order.companyNid)
@@ -49,12 +49,12 @@ final class MobileOrderEncoderTests: XCTestCase {
     }
     
     func testRoundTripOfAllProperties() throws {
-        let order = MobileOrder()
+        let order = LegacyOrder()
         order.fillWithRandomValues()
                 
-        let encoded = MobileOrderEncoder.encodeMobileOrder(order: order)
+        let encoded = LegacyOrderEncoder.encodeLegacyOrder(order: order)
         
-        let decoded = MobileOrderDecoder.decodeMobileOrder(blob: encoded)
+        let decoded = LegacyOrderDecoder.decodeLegacyOrder(blob: encoded)
         
         XCTAssertEqual(order.id, decoded.id)
         XCTAssertEqual(decoded.transactionCurrencyNid, order.transactionCurrencyNid)
@@ -349,15 +349,15 @@ fileprivate func getRandomMoneyWithoutCurrencyOrNil(numberOfDecimals: Int = 4) -
     return Int.random(in: 1 ... 5) == 1 ? nil : getRandomMoneyWithoutCurrency(numberOfDecimals: numberOfDecimals)
 }
 
-fileprivate func getMockOrderLine() -> MobileOrderLine {
-    let mobileOrderLine = MobileOrderLine()
+fileprivate func getMockOrderLine() -> LegacyOrderLine {
+    let mobileOrderLine = LegacyOrderLine()
     
     mobileOrderLine.fillWithRandomValues()
     
     return mobileOrderLine
 }
 
-fileprivate extension MobileOrder {
+fileprivate extension LegacyOrder {
     func fillWithRandomValues() {
         transactionCurrencyNid = getRandomInt()
         companyNid = getRandomInt()
@@ -488,7 +488,7 @@ fileprivate extension MobileOrder {
         levy = getRandomMoneyWithoutCurrencyOrNil()
         
         for _ in 1 ... 5 {
-            let orderLine = MobileOrderLine()
+            let orderLine = LegacyOrderLine()
             orderLine.fillWithRandomValues()
             lines.append(orderLine)
         }
@@ -508,12 +508,12 @@ fileprivate extension MobileOrder {
     }
 }
 
-fileprivate extension MobileOrder.DeliveryInfoForPartitioning {
+fileprivate extension LegacyOrder.DeliveryInfoForPartitioning {
     func fillWithRandomValues() {
     }
 }
 
-fileprivate extension MobileOrderLine {
+fileprivate extension LegacyOrderLine {
     
     func fillWithRandomValues() {
         

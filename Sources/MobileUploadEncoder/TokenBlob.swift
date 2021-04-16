@@ -30,7 +30,7 @@ class TokenBlob {
         dateFormatter.locale = .current
     }
     
-    func append(_ tokenType: MobileOrderDecoder.tokenType, _ parameters: String ...) {
+    func append(_ tokenType: LegacyOrderDecoder.tokenType, _ parameters: String ...) {
         let token = tokenType.rawValue
         let blob: String
         
@@ -95,88 +95,88 @@ class TokenBlob {
     }
     
     
-    func addStringIfNotEmpty(_ token: MobileOrderDecoder.tokenType, _ string: String?) {
+    func addStringIfNotEmpty(_ token: LegacyOrderDecoder.tokenType, _ string: String?) {
         if let string = string, !string.isEmpty {
             let safeString = MobileDownloadDecoderService.getsafeMobileString(string)
             append(token, safeString)
         }
     }
     
-    func addRecNidIfPositive(_ token: MobileOrderDecoder.tokenType, _ recNid: Int?) {
+    func addRecNidIfPositive(_ token: LegacyOrderDecoder.tokenType, _ recNid: Int?) {
         if let recNid = recNid, recNid > 0 {
             append(token, getString(recNid))
         }
     }
     
-    func addDecimal2(_ token: MobileOrderDecoder.tokenType, _ value: MoneyWithoutCurrency?) {
+    func addDecimal2(_ token: LegacyOrderDecoder.tokenType, _ value: MoneyWithoutCurrency?) {
         append(token, getString(value, numberOfDecimals: 2))
     }
     
-    func addDecimal4(_ token: MobileOrderDecoder.tokenType, _ value: MoneyWithoutCurrency?) {
+    func addDecimal4(_ token: LegacyOrderDecoder.tokenType, _ value: MoneyWithoutCurrency?) {
         append(token, getString(value, numberOfDecimals: 4))
     }
     
-    func addDecimal2IfNonZero(_ token: MobileOrderDecoder.tokenType, _ value: MoneyWithoutCurrency?) {
+    func addDecimal2IfNonZero(_ token: LegacyOrderDecoder.tokenType, _ value: MoneyWithoutCurrency?) {
         if let value = value, !value.isZero {
             append(token, getString(value, numberOfDecimals: 2))
         }
     }
     
-    func addDecimal4IfNonZero(_ token: MobileOrderDecoder.tokenType, _ value: MoneyWithoutCurrency?) {
+    func addDecimal4IfNonZero(_ token: LegacyOrderDecoder.tokenType, _ value: MoneyWithoutCurrency?) {
         if let value = value, !value.isZero {
             append(token, getString(value, numberOfDecimals: 4))
         }
     }
     
-    func addBoolIfTrue(_ token: MobileOrderDecoder.tokenType, _ value: Bool) {
+    func addBoolIfTrue(_ token: LegacyOrderDecoder.tokenType, _ value: Bool) {
         if value {
             append(token, getString(value))
         }
     }
     
-    func addBoolIfNotNull(_ token: MobileOrderDecoder.tokenType, _ value: Bool) {
+    func addBoolIfNotNull(_ token: LegacyOrderDecoder.tokenType, _ value: Bool) {
         if value {
             append(token, getString(value))
         }
     }
     
-    func addBool(_ token: MobileOrderDecoder.tokenType, _ value: Bool) {
+    func addBool(_ token: LegacyOrderDecoder.tokenType, _ value: Bool) {
         append(token, getString(value))
     }
     
-    func addInt(_ token: MobileOrderDecoder.tokenType, _ value: Int?) {
+    func addInt(_ token: LegacyOrderDecoder.tokenType, _ value: Int?) {
         append(token, getString(value))
     }
 
-    func addIntIfNotNull(_ token: MobileOrderDecoder.tokenType, _ value: Int?) {
+    func addIntIfNotNull(_ token: LegacyOrderDecoder.tokenType, _ value: Int?) {
         if let number = value {
             append(token, getString(number))
         }
     }
     
-    func addDateIfNotNull(_ token: MobileOrderDecoder.tokenType, _ value: Date?, _ format: dateFormat) {
+    func addDateIfNotNull(_ token: LegacyOrderDecoder.tokenType, _ value: Date?, _ format: dateFormat) {
         if let date = value {
             append(token, getString(date, format))
         }
     }
     
-    func addMoneyAsDecimal(_ token: MobileOrderDecoder.tokenType, _ value: MoneyWithoutCurrency) {
+    func addMoneyAsDecimal(_ token: LegacyOrderDecoder.tokenType, _ value: MoneyWithoutCurrency) {
         append(token, getString(value.decimalValue))
     }
     
-    func addMoneyAsDecimalIfNotNull(_ token: MobileOrderDecoder.tokenType, _ value: MoneyWithoutCurrency?) {
+    func addMoneyAsDecimalIfNotNull(_ token: LegacyOrderDecoder.tokenType, _ value: MoneyWithoutCurrency?) {
         if let amount = value {
             append(token, getString(amount.decimalValue))
         }
     }
     
-    func addStringIfNotNull(_ token: MobileOrderDecoder.tokenType, _ value: String?) {
+    func addStringIfNotNull(_ token: LegacyOrderDecoder.tokenType, _ value: String?) {
         if let value = value {
             append(token, value)
         }
     }
     
-    func addDateAndEmpNidIfDateIsNotNull(_ token: MobileOrderDecoder.tokenType, _ date: Date?, _ empNid: Int?, _ format: dateFormat) {
+    func addDateAndEmpNidIfDateIsNotNull(_ token: LegacyOrderDecoder.tokenType, _ date: Date?, _ empNid: Int?, _ format: dateFormat) {
         if let date = date {
             append(token, getString(date, format), getString(empNid))
         }
