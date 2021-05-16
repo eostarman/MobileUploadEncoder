@@ -73,7 +73,7 @@ fileprivate extension LegacyOrder {
         
         tokenBlob.addBoolIfTrue(.IsExistingOrder, isExistingOrder)
         tokenBlob.addBoolIfTrue(.PrintedReviewInvoice, printedReviewInvoice)
-        tokenBlob.addIntIfNotNull(.OrderType, orderType?.rawValue)
+        tokenBlob.addIntIfNotNull(.OrderType, orderType.rawValue)
         
         tokenBlob.addBoolIfTrue(.HeldStatus, heldStatus)
         tokenBlob.addBoolIfTrue(.VoidedStatus, isVoided)
