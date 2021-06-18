@@ -3,9 +3,11 @@
 import Foundation
 import MoneyAndExchangeRates
 import MobileLegacyOrder
+import MobileDownloadDecoder
+import MobileDownload
 
-struct LegacyOrderEncoder {
-    static func encodeLegacyOrder(order: LegacyOrder) -> String {
+public struct LegacyOrderEncoder {
+    public static func encodeLegacyOrder(order: LegacyOrder) -> String {
         let blob = order.encodeForMobileUpload()
         return blob
     }
@@ -14,7 +16,7 @@ struct LegacyOrderEncoder {
 fileprivate extension LegacyOrder {
     
     func encodeForMobileUpload() -> String {
-        let tokenBlob = TokenBlob()
+        let tokenBlob = TokenBlob<LegacyOrderEncodingToken>()
         
         tokenBlob.addRecNidIfPositive(.TransactionCurrencyNid, transactionCurrencyNid);
         tokenBlob.addRecNidIfPositive(.CompanyNid, companyNid);

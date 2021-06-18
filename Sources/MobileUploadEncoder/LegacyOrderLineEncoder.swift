@@ -7,7 +7,7 @@ import MobileLegacyOrder
 
 class LegacyOrderLineEncoder {
     
-    static func encodeForMobileUpload(tokenBlob: TokenBlob, lines: [LegacyOrderLine]) {
+    static func encodeForMobileUpload(tokenBlob: TokenBlob<LegacyOrderEncodingToken>, lines: [LegacyOrderLine]) {
 
         // for most of the fields we only emit the token if it differs from the prior lines value
         var promo1Nid: Int? = nil
@@ -28,8 +28,14 @@ class LegacyOrderLineEncoder {
         var unitCRV: MoneyWithoutCurrency? = nil
         var qtyPalletOptimizationAdjustment: Int? = nil
         var wasDownloaded: Bool = false
-        
+
         for x in lines {
+            
+            // MobileOrderParser.cs should have initialized 'count' to -999_999 (e.g. NO_COUNT) - instead it initialized it to -1. So, I have to transmit the -999_999
+            tokenBlob.addInt(.obsolete_Count, -999_999)
+            tokenBlob.addInt(.obsolete_BuildTo, -999_999)
+            tokenBlob.addInt(.obsolete_RouteBookBuildTo, -999_999)
+            
             if x.qtyOrdered != qtyOrdered {
                 qtyOrdered = x.qtyOrdered
                 tokenBlob.addInt(.QtyOrdered, qtyOrdered)
