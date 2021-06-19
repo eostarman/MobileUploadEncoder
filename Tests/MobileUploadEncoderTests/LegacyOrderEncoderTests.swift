@@ -303,16 +303,18 @@ fileprivate func getRandomDate() -> Date {
 }
 
 fileprivate func getRandomDateOrNil() -> Date? {
-    return nil
     if forceNils { return nil }
   
     return Int.random(in: 1 ... 5) == 1 ? nil : getRandomDate()
 }
 
+fileprivate func getRandomString() -> String {
+    getRandomStringOrNil() ?? ""
+}
+
 fileprivate func getRandomStringOrNil() -> String? {
     if forceNils { return nil }
-    return "xx"
-  
+
     switch Int.random(in: 1 ... 3) {
     case 1:
         return ""
@@ -327,9 +329,8 @@ fileprivate func getRandomBool() -> Bool {
     if forceTrue {
         return true
     } else {
-        return false
+        return Bool.random()
     }
-    return Bool.random()
 }
 
 fileprivate func getRandomMoneyWithoutCurrency(numberOfDecimals: Int = 4) -> MoneyWithoutCurrency {
@@ -372,7 +373,7 @@ fileprivate extension LegacyOrder {
         heldStatus = getRandomBool()
         isVoided = getRandomBool()
         deliveredStatus = getRandomBool()
-        orderType = eOrderType.allCases.randomElement()
+        orderType = eOrderType.allCases.randomElement() ?? .FreshPresellOrder
         isHotShot = getRandomBool()
         numberSummarized = getRandomIntOrNil()
         summaryOrderNumber = getRandomIntOrNil()
@@ -411,14 +412,14 @@ fileprivate extension LegacyOrder {
         followupInvoiceByNid = followupInvoiceDate == nil ? nil :getRandomIntOrNil()
         loadedDate = getRandomDateOrNil()
         loadedByNid = loadedDate == nil ? nil :getRandomIntOrNil()
-        orderedDate = getRandomDateOrNil()
-        orderedByNid = orderedDate == nil ? nil :getRandomIntOrNil()
+        orderedDate = getRandomDate()
+        orderedByNid = getRandomInt()
         palletizedDate = getRandomDateOrNil()
         palletizedByNid = palletizedDate == nil ? nil :getRandomIntOrNil()
         pickListDate = getRandomDateOrNil()
         pickListByNid = pickListDate == nil ? nil :getRandomIntOrNil()
-        shippedDate = getRandomDateOrNil()
-        shippedByNid = shippedDate == nil ? nil :getRandomIntOrNil()
+        shippedDate = getRandomDate()
+        shippedByNid = getRandomInt()
         stagedDate = getRandomDateOrNil()
         stagedByNid = stagedDate == nil ? nil :getRandomIntOrNil()
         verifiedDate = getRandomDateOrNil()
@@ -455,7 +456,7 @@ fileprivate extension LegacyOrder {
         isEft = getRandomBool()
         poNumber = getRandomStringOrNil()
         takenFrom = getRandomStringOrNil()
-        invoiceNote = getRandomStringOrNil()
+        invoiceNote = getRandomString()
         packNote = getRandomStringOrNil()
         serializedItems = getRandomStringOrNil()
         receivedBy = getRandomStringOrNil()

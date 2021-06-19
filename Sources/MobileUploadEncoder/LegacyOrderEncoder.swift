@@ -3,8 +3,7 @@
 import Foundation
 import MoneyAndExchangeRates
 import MobileLegacyOrder
-import MobileDownloadDecoder
-import MobileDownload
+import MobileLegacyCoder
 
 public struct LegacyOrderEncoder {
     public static func encodeLegacyOrder(order: LegacyOrder) -> String {

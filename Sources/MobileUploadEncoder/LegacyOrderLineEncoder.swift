@@ -2,8 +2,8 @@
 
 import Foundation
 import MoneyAndExchangeRates
-import MobileDownload
 import MobileLegacyOrder
+import MobileLegacyCoder
 
 class LegacyOrderLineEncoder {
     

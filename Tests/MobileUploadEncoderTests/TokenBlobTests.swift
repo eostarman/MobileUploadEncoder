@@ -9,12 +9,13 @@ import Foundation
 import XCTest
 import MobileDownloadDecoder
 import MoneyAndExchangeRates
+import MobileLegacyCoder
 @testable import MobileUploadEncoder
 
 class TokenBlobTests: XCTestCase {
     
     func testEmptyString() throws {
-        let tokenBlob = TokenBlob()
+        let tokenBlob = TokenBlob<LegacyOrderEncodingToken>()
         
         tokenBlob.addStringIfNotEmpty(.ShipAdr1, nil)
         
@@ -22,7 +23,7 @@ class TokenBlobTests: XCTestCase {
     }
 
     func testNilDate() throws {
-        let tokenBlob = TokenBlob()
+        let tokenBlob = TokenBlob<LegacyOrderEncodingToken>()
         
         tokenBlob.addDateIfNotNull(.DeliveryDate, nil, .yyyyMMdd)
         
@@ -30,7 +31,7 @@ class TokenBlobTests: XCTestCase {
     }
     
     func testSimpleDate() throws {
-        let tokenBlob = TokenBlob()
+        let tokenBlob = TokenBlob<LegacyOrderEncodingToken>()
         
         tokenBlob.addDateIfNotNull(.DeliveryDate, christmasDay, .yyyyMMdd)
         
@@ -38,7 +39,7 @@ class TokenBlobTests: XCTestCase {
     }
     
     func testSimpleDateWithDashes() throws {
-        let tokenBlob = TokenBlob()
+        let tokenBlob = TokenBlob<LegacyOrderEncodingToken>()
         
         tokenBlob.addDateIfNotNull(.DeliveryDate, christmasDay, .yyyy_MM_dd)
         
@@ -46,7 +47,7 @@ class TokenBlobTests: XCTestCase {
     }
     
     func testSimpleDateWithZeroTime() throws {
-        let tokenBlob = TokenBlob()
+        let tokenBlob = TokenBlob<LegacyOrderEncodingToken>()
         
         tokenBlob.addDateIfNotNull(.DeliveryDate, christmasDay, .yyyyMMdd_HHmmss)
         
@@ -54,7 +55,7 @@ class TokenBlobTests: XCTestCase {
     }
     
     func testSimpleDateWithMorningTime() throws {
-        let tokenBlob = TokenBlob()
+        let tokenBlob = TokenBlob<LegacyOrderEncodingToken>()
         
         let time = christmasDay.addingTimeInterval(8 * 60 * 60 + 15 * 60) // 8:15:00 am
         
@@ -64,7 +65,7 @@ class TokenBlobTests: XCTestCase {
     }
     
     func testSimpleDateWithAfternoonTime() throws {
-        let tokenBlob = TokenBlob()
+        let tokenBlob = TokenBlob<LegacyOrderEncodingToken>()
         
         let time = christmasDay.addingTimeInterval(21 * 60 * 60 + 13 * 60 + 17) // 9:13:17 pm
         
@@ -74,7 +75,7 @@ class TokenBlobTests: XCTestCase {
     }
     
     func testSimpleInteger() throws {
-        let tokenBlob = TokenBlob()
+        let tokenBlob = TokenBlob<LegacyOrderEncodingToken>()
                 
         tokenBlob.addIntIfNotNull(.OrderNumber, 123_456_789)
         
@@ -83,7 +84,7 @@ class TokenBlobTests: XCTestCase {
     
     
     func testDecimal4() throws {
-        let tokenBlob = TokenBlob()
+        let tokenBlob = TokenBlob<LegacyOrderEncodingToken>()
         
         let amount = MoneyWithoutCurrency(amount: 1.12, numberOfDecimals: 2)
                 
@@ -93,7 +94,7 @@ class TokenBlobTests: XCTestCase {
     }
     
     func testDecimal2() throws {
-        let tokenBlob = TokenBlob()
+        let tokenBlob = TokenBlob<LegacyOrderEncodingToken>()
         
         let amount = MoneyWithoutCurrency(amount: 123.00, numberOfDecimals: 2)
                 
@@ -103,7 +104,7 @@ class TokenBlobTests: XCTestCase {
     }
     
     func testSimpleNilInteger() throws {
-        let tokenBlob = TokenBlob()
+        let tokenBlob = TokenBlob<LegacyOrderEncodingToken>()
                 
         tokenBlob.addIntIfNotNull(.ItemWriteoffNid, nil)
         
@@ -117,9 +118,9 @@ class TokenBlobTests: XCTestCase {
             \u{C}
             """
         
-        let safeString = MobileDownloadDecoderService.getsafeMobileString(string)
+        let safeString = LegacySafeString.getsafeMobileString(string)
         
-        let decodedString = MobileDownloadDecoderService.decodeSafeMobileString(safeString: safeString)
+        let decodedString = LegacySafeString.decodeSafeMobileString(safeString: safeString)
         
         XCTAssertEqual(string, decodedString)
     }
@@ -127,9 +128,9 @@ class TokenBlobTests: XCTestCase {
     func testSecondString() throws {
         let string = "\t\u{C}\r\n"
         
-        let safeString = MobileDownloadDecoderService.getsafeMobileString(string)
+        let safeString = LegacySafeString.getsafeMobileString(string)
         
-        let decodedString = MobileDownloadDecoderService.decodeSafeMobileString(safeString: safeString)
+        let decodedString = LegacySafeString.decodeSafeMobileString(safeString: safeString)
         
         XCTAssertEqual(string, decodedString)
     }
@@ -137,7 +138,7 @@ class TokenBlobTests: XCTestCase {
     func testStringWithBackspace() throws {
         let string = "\u{8}"
         
-        let safeString = MobileDownloadDecoderService.getsafeMobileString(string)
+        let safeString = LegacySafeString.getsafeMobileString(string)
         
         // the \b is replace with " ", then the entire string is prefixed with the "magic" token of \b
         XCTAssertEqual(safeString, "\u{8} ")
